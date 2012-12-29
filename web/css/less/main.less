@@ -10,16 +10,33 @@
 .box-shadow(@style, @alpha: 50%) when (isnumber(@alpha)) {
   .box-shadow(@style, rgba(0, 0, 0, @alpha));
 }
+
+.rounded-corners (@radius: 5px) {
+  -webkit-border-radius: @radius;
+  -moz-border-radius: @radius;
+  -ms-border-radius: @radius;
+  -o-border-radius: @radius;
+  border-radius: @radius;
+}
+
 .box {
   .box-shadow(0 0 20px, 80%)
 }
 
 .homeBackground {
-  background-color: fadeout(@home, 30%) !important;
+  background-color: fadeout(@home, 50%) !important;
 }
 
 .awayBackground {
-  background-color: fadeout(@away, 30%) !important;
+  background-color: fadeout(@away, 50%) !important;
+}
+
+#main-header, section {
+    padding: 6px 0 6px 0;
+    width: 98%;
+    background-color: rgba(255,255,255,0.4);
+    margin: 0 auto !important;
+  .rounded-corners(5px);
 }
 
 
@@ -40,11 +57,7 @@
     width: 500px;
   }
 }
-#main-header {
-  width: 99%;
-  background-color: rgba(255,255,255,0.4);
-  margin: 0 auto !important;
-}
+
 
 #inner-wrapper {
   background-image: url("../../img/Grass_Background.jpg");
@@ -59,15 +72,14 @@
   height: 12px;
 }
 
+.large-padding {
+  height: 24px;
+}
+
+
 .table-centered {
   margin: 0 auto !important;
   float: none !important;
 }
 
-input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
-  color: #555555;
-}
-input:-moz-placeholder, textarea:-moz-placeholder {
-  color: #555555;
-}
 

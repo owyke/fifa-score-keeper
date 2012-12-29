@@ -12,7 +12,7 @@
     <body>
 		<div id="main-wrapper" class="pagination-centered">
             <div id="inner-wrapper" class="box">
-                <div class="row-fluid small-padding"></div>
+                <div class="row-fluid large-padding"></div>
                 <div id="main-header" class="row-fluid"><h1>Fifa score</h1></div>
                 <div class="row-fluid small-padding"></div>
                 <section data-bind="with: setup">
@@ -26,7 +26,7 @@
                                 <input id="awayPlayer" type="text" data-bind="value: awayPlayer" class="input-small awayBackground" placeholder="Player away" />
                         </div>
                         <div class="row-fluid">
-                                <button data-bind="click: $parent.showScoreModal" class="btn">Register match result</button>
+                                <button data-bind="enable: $parent.setupComplete(), click: $parent.showScoreModal" class="btn">Register match result</button>
                         </div>
 
                 </section>
@@ -79,7 +79,7 @@
                     self.awayGoals = ko.observable();
                     self.homeGoals = ko.observable();
 
-
+                    self.setupComplete = self.setup().isComplete
 
 					self.showScoreModal = function() {
                         $('#awayGoals').attr('placeholder', self.setup().awayPlayer() + " score");

@@ -18,6 +18,11 @@ function MatchSetup() {
 	self.homePlayer = ko.observable("");
 	self.awayPlayer = ko.observable("");
 
+    self.isComplete = function() {
+       return (self.homeTeam() && self.awayTeam() && self.homePlayer() && self.awayPlayer())
+
+    }
+
 }
 
 
