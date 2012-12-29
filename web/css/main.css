@@ -1,8 +1,48 @@
-#main-wrapper {
-    margin-top: 20px;
+.box {
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+  -webkit-box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+  -moz-box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
 }
-
+.homeBackground {
+  background-color: rgba(255, 141, 135, 0.7) !important;
+}
+.awayBackground {
+  background-color: rgba(187, 187, 255, 0.7) !important;
+}
+@media (max-width: 480px) {
+  #inner-wrapper {
+    width: 80%;
+  }
+}
+@media (min-width: 481px) {
+  #inner-wrapper {
+    width: 500px;
+  }
+}
+#main-header {
+  width: 99%;
+  background-color: rgba(255, 255, 255, 0.4);
+  margin: 0 auto !important;
+}
+#inner-wrapper {
+  background-image: url("../../img/Grass_Background.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 800px;
+  margin: 0 auto !important;
+}
+.small-padding {
+  height: 12px;
+}
 .table-centered {
-    margin: 0 auto !important;
-    float: none !important;
+  margin: 0 auto !important;
+  float: none !important;
+}
+input::-webkit-input-placeholder,
+textarea::-webkit-input-placeholder {
+  color: #555555;
+}
+input:-moz-placeholder,
+textarea:-moz-placeholder {
+  color: #555555;
 }
