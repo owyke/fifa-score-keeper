@@ -13,14 +13,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
-/**
- * Created with IntelliJ IDEA.
- * User: wykeosk
- * Date: 2013-06-07
- * Time: 11:47
- * To change this template use File | Settings | File Templates.
- */
-
 @Controller
 public class PlayerController {
 

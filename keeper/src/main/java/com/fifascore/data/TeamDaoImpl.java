@@ -9,13 +9,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
-/**
- * Created with IntelliJ IDEA.
- * User: wykeosk
- * Date: 2013-06-07
- * Time: 18:50
- * To change this template use File | Settings | File Templates.
- */
 @Component
 public class TeamDaoImpl implements TeamDao {
 
