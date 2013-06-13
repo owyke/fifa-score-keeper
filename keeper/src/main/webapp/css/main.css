@@ -1,0 +1,59 @@
+.box {
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+    -webkit-box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+    -moz-box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+}
+
+.homeBackground {
+    background-color: rgba(255, 141, 135, 0.5) !important;
+}
+
+.awayBackground {
+    background-color: rgba(187, 187, 255, 0.5) !important;
+}
+
+#main-header,
+section {
+    padding: 6px 0 6px 0;
+    width: 98%;
+    background-color: rgba(255, 255, 255, 0.8);
+    margin: 0 auto !important;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+    border-radius: 5px;
+}
+
+@media (max-width: 480px) {
+    #inner-wrapper {
+        width: 80%;
+    }
+}
+
+@media (min-width: 481px) {
+    #inner-wrapper {
+        width: 500px;
+    }
+}
+
+#inner-wrapper {
+    background-image: url("../../img/Grass_Background.jpg");
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 800px;
+    margin: 0 auto !important;
+}
+
+.small-padding {
+    height: 12px;
+}
+
+.large-padding {
+    height: 24px;
+}
+
+.table-centered {
+    margin: 0 auto !important;
+    float: none !important;
+}
