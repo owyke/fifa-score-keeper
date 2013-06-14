@@ -18,5 +18,4 @@ public interface MatchService {
 
     public Match addMatch(final Match match);
 
-    public List<Match> getAllMatches();
 }

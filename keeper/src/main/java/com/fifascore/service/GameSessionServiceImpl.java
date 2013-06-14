@@ -24,10 +24,17 @@ public class GameSessionServiceImpl implements GameSessionService {
     @Autowired
     private GameSessionDao gameSessionDao;
 
-    public List<GameSession> getCurrentGameSession(final Boolean createNew) {
+    public GameSession getCurrentGameSession(final Boolean createNew) {
 
         List<GameSession> activeGameSessions = gameSessionDao.getActiveGameSessions();
-        return activeGameSessions;
+        return activeGameSessions.get(0);
+    }
+
+    @Transactional
+    public GameSession addUserSubmittedGameSession(final GameSession session) {
+        session.setSessionStarted(new Date());
+        gameSessionDao.persist(session);
+        return session;
     }
 
     @Transactional

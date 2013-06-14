@@ -32,6 +32,8 @@ public class GameSession {
 
     private String location;
 
+    private String name;
+
     public Long getId() {
         return id;
     }
@@ -70,5 +72,13 @@ public class GameSession {
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

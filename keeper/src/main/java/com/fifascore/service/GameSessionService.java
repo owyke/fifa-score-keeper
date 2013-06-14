@@ -13,7 +13,9 @@ import java.util.List;
  */
 public interface GameSessionService {
 
-    public List<GameSession> getCurrentGameSession(Boolean createNew);
+    public GameSession getCurrentGameSession(Boolean createNew);
+
+    public GameSession addUserSubmittedGameSession(final GameSession session);
 
     public GameSession createNewGameSession(final Boolean closePreviousSessions);
 

@@ -36,17 +36,11 @@ public class MatchServiceImpl implements MatchService {
 
     @Transactional
     public Match addMatch(final Match match) {
-        List<GameSession> gameSessions = gameSessionService.getCurrentGameSession(true);
-        if (gameSessions == null || gameSessions.size() == 0) {
-            gameSessions = new ArrayList<GameSession>();
-            gameSessions.add(gameSessionService.createNewGameSession(true));
+        GameSession gameSession = gameSessionService.getCurrentGameSession(true);
+        if (gameSession == null) {
+            gameSession = gameSessionService.createNewGameSession(true);
         }
-        return addMatch(match, gameSessions.get(0));
+        return addMatch(match, gameSession);
     }
-
-    public List<Match> getAllMatches() {
-        return matchDao.getAll();
-    }
-
 
 }

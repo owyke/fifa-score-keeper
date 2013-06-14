@@ -12,6 +12,15 @@ function MatchSetup() {
 
 }
 
+function GameSession() {
+    var self = this;
+    self.id = ko.observable(null);
+    self.name = ko.observable("");
+    self.location = ko.observable("");
+    self.sessionStarted = ko.observable("");
+    self.sessionEnded = ko.observable("");
+}
+
 
 function Match() {
     var self = this;

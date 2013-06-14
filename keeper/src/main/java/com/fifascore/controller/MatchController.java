@@ -20,11 +20,16 @@ public class MatchController {
     MatchService matchService;
 
 
+    @Autowired
+    GameSessionController gameSessionController;
+
+
+
     @RequestMapping(value = "/match")
     public
     @ResponseBody
-    List<Match> getAllAvailablePlayers() {
-        List<Match> matches = matchService.getAllMatches();
+    List<Match> getAllMatchesForCurrentSession() {
+        List<Match> matches = gameSessionController.getCurrentGameSession().getMatches();
         return matches;
     }
 
