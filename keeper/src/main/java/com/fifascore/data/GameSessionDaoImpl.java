@@ -21,7 +21,7 @@ public class GameSessionDaoImpl implements GameSessionDao {
     }
 
     public List<GameSession> getActiveGameSessions() {
-        TypedQuery<GameSession> query = em.createQuery("SELECT gs FROM GameSession gs WHERE gs.sessionEnded IS NULL", GameSession.class);
+        TypedQuery<GameSession> query = em.createQuery("SELECT gs FROM GameSession gs WHERE gs.sessionEnded IS NULL order by gs.id DESC", GameSession.class);
         return query.getResultList();
     }
 

@@ -1,6 +1,7 @@
 package com.fifascore.model;
 
 import com.sun.istack.internal.NotNull;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -8,6 +9,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "MATCH_RECORD")
+@JsonIgnoreProperties(ignoreUnknown = true) //TODO neccesary since JS sends additinal data, should ba handled with object mapper config instead
 public class Match {
     @Id
     @GeneratedValue
@@ -17,15 +19,30 @@ public class Match {
     private Date registrationTime;
 
     @NotNull
-    @ManyToOne
-    @JoinColumn(name = "MATCH_SETUP_ID", referencedColumnName = "ID")
-    private MatchSetup setup;
-
-    @NotNull
     private Integer homeGoals;
 
     @NotNull
     private Integer awayGoals;
+
+    @NotNull
+    @ManyToOne
+    @JoinColumn(name = "HOME_PLAYER_ID", referencedColumnName = "ID")
+    private Player homePlayer;
+
+    @NotNull
+    @ManyToOne
+    @JoinColumn(name = "AWAY_PLAYER_ID", referencedColumnName = "ID")
+    private Player awayPlayer;
+
+    @NotNull
+    @ManyToOne
+    @JoinColumn(name = "HOME_TEAM_ID", referencedColumnName = "ID")
+    private Team homeTeam;
+
+    @NotNull
+    @ManyToOne
+    @JoinColumn(name = "AWAY_TEAM_ID", referencedColumnName = "ID")
+    private Team awayTeam;
 
     public Long getId() {
         return id;
@@ -43,14 +60,6 @@ public class Match {
         this.registrationTime = registrationTime;
     }
 
-    public MatchSetup getSetup() {
-        return setup;
-    }
-
-    public void setSetup(MatchSetup setup) {
-        this.setup = setup;
-    }
-
     public Integer getHomeGoals() {
         return homeGoals;
     }
@@ -65,5 +74,37 @@ public class Match {
 
     public void setAwayGoals(Integer awayGoals) {
         this.awayGoals = awayGoals;
+    }
+
+    public Player getHomePlayer() {
+        return homePlayer;
+    }
+
+    public void setHomePlayer(Player homePlayers) {
+        this.homePlayer = homePlayers;
+    }
+
+    public Player getAwayPlayer() {
+        return awayPlayer;
+    }
+
+    public void setAwayPlayer(Player awayPlayers) {
+        this.awayPlayer = awayPlayers;
+    }
+
+    public Team getHomeTeam() {
+        return homeTeam;
+    }
+
+    public void setHomeTeam(Team homeTeam) {
+        this.homeTeam = homeTeam;
+    }
+
+    public Team getAwayTeam() {
+        return awayTeam;
+    }
+
+    public void setAwayTeam(Team awayTeam) {
+        this.awayTeam = awayTeam;
     }
 }

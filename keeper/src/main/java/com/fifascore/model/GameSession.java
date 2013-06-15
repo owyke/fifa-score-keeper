@@ -1,5 +1,7 @@
 package com.fifascore.model;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
@@ -13,6 +15,7 @@ import java.util.List;
  */
 
 @Entity
+@JsonIgnoreProperties(ignoreUnknown = true) //TODO neccesary since JS sends additinal data, should ba handled with object mapper config instead
 public class GameSession {
 
     @Id

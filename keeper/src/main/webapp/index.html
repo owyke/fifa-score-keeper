@@ -11,21 +11,23 @@
 </head>
 <body>
 <div id="main-wrapper" class="pagination-centered">
+
     <div id="inner-wrapper" class="box">
         <div class="row-fluid large-padding"></div>
         <div id="main-header" class="row-fluid"><h1>Fifa score</h1></div>
         <div class="row-fluid small-padding"></div>
 
-        <section data-bind="visible: !$root.activeSession">
+        <section data-bind="visible: !$root.session.active()">
             <div class="row-fluid">
                 <button data-bind="click: $root.showGameSessionModal" class="btn">Start game session</button>
             </div>
         </section>
 
-        <section data-bind="visible: $root.activeSession">
-            <div class="row-fluid" data-bind="with: $root.activeSession">
-                Session name: <span data-bind="value: name"></span>
-                Session location: <span data-bind="value: location"></span>
+        <section data-bind="visible: $root.session.active">
+            <div class="row-fluid">
+                <div><strong>Session name:</strong> <span data-bind="text: session.name"></span></div>
+                <div><strong>Session location:</strong> <span data-bind="text: session.location"></span></div>
+                <div><strong>Session started:</strong> <span data-bind="text: session.sessionStartedFormatted"></span></div>
             </div>
         </section>
 
@@ -34,18 +36,18 @@
 
 
 
-        <section data-bind="with: setup">
+        <section data-bind="visible: $root.session.active">
 
             <div class="row-fluid">
-                <input id="homeTeam" type="text" data-bind="value: homeTeam, typeahead: $parent.availableTeams" class="input-small homeBackground" placeholder="Home team"/>
-                <input id="awayTeam" type="text" data-bind="value: awayTeam, typeahead: $parent.availableTeams" class="input-small awayBackground" placeholder="Away team"/>
+                <input id="homeTeam" type="text" data-bind="value: homeTeamName, typeahead: availableTeamNames" class="input-small homeBackground" placeholder="Home team"/>
+                <input id="awayTeam" type="text" data-bind="value: awayTeamName, typeahead: availableTeamNames" class="input-small awayBackground" placeholder="Away team"/>
             </div>
             <div class="row-fluid">
-                <input id="homePlayer" type="text" data-bind="value: homePlayer, typeahead: $parent.availablePlayers" class="input-small homeBackground" placeholder="Player home"/>
-                <input id="awayPlayer" type="text" data-bind="value: awayPlayer, typeahead: $parent.availablePlayers" class="input-small awayBackground" placeholder="Player away"/>
+                <input id="homePlayer" type="text" data-bind="value: homePlayerName, typeahead: availablePlayerNames" class="input-small homeBackground" placeholder="Player home"/>
+                <input id="awayPlayer" type="text" data-bind="value: awayPlayerName, typeahead: availablePlayerNames" class="input-small awayBackground" placeholder="Player away"/>
             </div>
             <div class="row-fluid">
-                <button data-bind="enable: $parent.setupComplete(), click: $parent.showScoreModal" class="btn">Register match result</button>
+                <button data-bind="enable: setupComplete(), click: showScoreModal" class="btn">Register match result</button>
             </div>
 
         </section>
@@ -92,20 +94,29 @@
 
     function MatchViewModel() {
         var self = this;
+        self.session = new GameSession();
+
         self.setup = ko.observable(new MatchSetup());
         self.matches = ko.observableArray([]);
+
         self.awayGoals = ko.observable();
         self.homeGoals = ko.observable();
 
-        self.activeSession = null;
+
         self.sessionName = ko.observable();
         self.sessionLocation = ko.observable();
 
-        self.setupComplete = self.setup().isComplete
+        self.awayTeamName = ko.observable();
+        self.homeTeamName = ko.observable();
+        self.awayPlayerName = ko.observable();
+        self.homePlayerName = ko.observable();
+
+
+        self.setupComplete = function() {return (self.awayTeamName() && self.homeTeamName() && self.awayPlayerName() && self.homePlayerName())};
 
         self.showScoreModal = function () {
-            $('#awayGoals').attr('placeholder', self.setup().awayPlayer() + " score");
-            $('#homeGoals').attr('placeholder', self.setup().homePlayer() + " score");
+            $('#awayGoals').attr('placeholder', self.awayPlayerName() + " score");
+            $('#homeGoals').attr('placeholder', self.homePlayerName() + " score");
             $('#resultModal').modal({
                 keyboard: true
             })
@@ -114,10 +125,23 @@
         self.registerScore = function () {
 
             var match = new Match();
-            match.awayGoals = self.awayGoals();
-            match.homeGoals = self.homeGoals();
-            match.setup(ko.toJS(self.setup))
-            self.matches.push(match);
+            match.awayGoals(self.awayGoals());
+            match.homeGoals(self.homeGoals());
+            match.homePlayer(self.availablePlayers[self.homePlayerName()]);
+            match.awayPlayer(self.availablePlayers[self.awayPlayerName()]);
+            match.homeTeam(self.availableTeams[self.homeTeamName()]);
+            match.awayTeam(self.availableTeams[self.awayTeamName()]);
+            $.ajax({
+                url: "ajax/match",
+                contentType: 'application/json',
+                method: "POST",
+                data: ko.toJSON(match),
+                success: function(data) {
+                    match.id = data.id;
+                }
+            });
+
+            self.session.matches.push(match);
             self.awayGoals('');
             self.homeGoals('');
             $('#resultModal').modal('hide');
@@ -139,24 +163,21 @@
                 method: "POST",
                 data: ko.toJSON(gameSession),
                 success: function(data) {
+                    console.log("Created session: ");
                     console.log(data);
-                    console.log(data.id);
-                    var newSession = new GameSession();
-                    newSession.id(data.id);
-                    newSession.name(data.name);
-                    newSession.location(data.location);
-                    newSession.sessionStarted(data.sesssionStarted);
-                    self.activeSession = newSession;
-
-
+                    self.session.id(data.id);
+                    self.session.name(data.name);
+                    self.session.location(data.location);
+                    self.session.sessionStarted(data.sessionStarted);
                 }
-
-            });
+           });
             $('#sessionModal').modal('hide');
         }
 
-        self.availablePlayers = ko.observableArray([]);
-        self.availableTeams = ko.observableArray([]);
+        self.availablePlayerNames = [];
+        self.availablePlayers = {};
+        self.availableTeamNames = [];
+        self.availableTeams = {};
     }
 
 
@@ -165,13 +186,13 @@
         model = new MatchViewModel();
         ko.applyBindings(model);
 
-
         $.ajax({
                     url: "ajax/player",
-                    async: true,
+                    async: false,
                     success: function (playerData, status) {
                         $.each(playerData, function (i, player) {
-                            model.availablePlayers.push(player.userName);
+                            model.availablePlayerNames.push(player.userName);
+                            model.availablePlayers[player.userName] = player;
                         });
                     }
 
@@ -179,13 +200,41 @@
         );
         $.ajax({
             url: "ajax/team",
-            async: true,
+            async: false,
             success: function (teamData, status) {
                 $.each(teamData, function (i, team) {
-                    model.availableTeams.push(team.name);
+                    model.availableTeamNames.push(team.name);
+                    model.availableTeams[team.name] = team;
                 });
             }
 
+        });
+
+        //Get existing session if exist
+        $.getJSON("ajax/session",function(existingSession) {
+            console.log(existingSession);
+            if(existingSession.id) {
+                var s = model.session;
+                s.id(existingSession.id);
+                s.location(existingSession.location);
+                s.name(existingSession.name)
+                s.sessionStarted(existingSession.sessionStarted);
+
+                // Data mapping for matches
+                $.each(existingSession.matches, function(index, existingMatch) {
+                    console.log(match);
+                    var match = new Match();
+                    match.id = existingMatch.id;
+                    match.homeGoals(existingMatch.homeGoals);
+                    match.awayGoals(existingMatch.awayGoals);
+                    match.homePlayer(model.availablePlayers[existingMatch.homePlayer.userName]);
+                    match.awayPlayer(model.availablePlayers[existingMatch.awayPlayer.userName]);
+                    match.homeTeam(model.availableTeams[existingMatch.homeTeam.name]);
+                    match.awayTeam(model.availableTeams[existingMatch.awayTeam.name]);
+                    s.matches.push(match);
+
+                })
+            }
         });
 
     });
