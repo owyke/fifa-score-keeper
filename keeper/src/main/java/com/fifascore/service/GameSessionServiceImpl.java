@@ -11,13 +11,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-/**
- * Created with IntelliJ IDEA.
- * User: wykeosk
- * Date: 2013-06-08
- * Time: 11:14
- * To change this template use File | Settings | File Templates.
- */
+
 @Service
 public class GameSessionServiceImpl implements GameSessionService {
 
@@ -27,13 +21,19 @@ public class GameSessionServiceImpl implements GameSessionService {
     public GameSession getCurrentGameSession(final Boolean createNew) {
 
         List<GameSession> activeGameSessions = gameSessionDao.getActiveGameSessions();
-        return activeGameSessions.get(0);
+        return activeGameSessions.size()>1?activeGameSessions.get(0):null;
     }
 
     @Transactional
     public GameSession addUserSubmittedGameSession(final GameSession session) {
         session.setSessionStarted(new Date());
         gameSessionDao.persist(session);
+        return session;
+    }
+
+    @Transactional
+    public GameSession updateSession(final GameSession session) {
+        gameSessionDao.merge(session);
         return session;
     }
 

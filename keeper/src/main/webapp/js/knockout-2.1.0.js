@@ -1355,8 +1355,8 @@
                 return a.replace(c,function (a, c, d, f, i, l, q) {
                     return b(q, c, g)
                 }).replace(d, function (a, c) {
-                    return b(c, "<\!-- ko --\>", g)
-                })
+                        return b(c, "<\!-- ko --\>", g)
+                    })
             }, Za: function (b) {
                 return a.s.na(function (c, e) {
                     c.nextSibling && a.ya(c.nextSibling, b, e)

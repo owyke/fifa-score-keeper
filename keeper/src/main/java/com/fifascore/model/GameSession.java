@@ -6,13 +6,6 @@ import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
-/**
- * Created with IntelliJ IDEA.
- * User: wykeosk
- * Date: 2013-06-07
- * Time: 19:46
- * To change this template use File | Settings | File Templates.
- */
 
 @Entity
 @JsonIgnoreProperties(ignoreUnknown = true) //TODO neccesary since JS sends additinal data, should ba handled with object mapper config instead

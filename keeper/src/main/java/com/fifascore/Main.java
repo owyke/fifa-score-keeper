@@ -7,13 +7,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import java.io.IOException;
 import java.util.Date;
 
-/**
- * Created with IntelliJ IDEA.
- * User: wykeosk
- * Date: 2013-06-13
- * Time: 21:27
- * To change this template use File | Settings | File Templates.
- */
+
 public class Main {
     public static void main(String[] args) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();

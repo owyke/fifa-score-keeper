@@ -8,9 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Service
 public class MatchServiceImpl implements MatchService {
 
@@ -26,9 +23,8 @@ public class MatchServiceImpl implements MatchService {
     @Transactional
     public Match addMatch(final Match match, final GameSession gameSession) {
 
-        //matchDao.persist(match);
+
         gameSession.getMatches().add(match);
-        //matchDao.persist(match);
         gameSessionDao.persist(gameSession);
 
         return match;
@@ -43,4 +39,8 @@ public class MatchServiceImpl implements MatchService {
         return addMatch(match, gameSession);
     }
 
+    @Transactional
+    public void deleteMatchById(final Long matchId) {
+        matchDao.deleteById(matchId);
+    }
 }

@@ -7,13 +7,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-/**
- * Created with IntelliJ IDEA.
- * User: wykeosk
- * Date: 2013-06-07
- * Time: 11:53
- * To change this template use File | Settings | File Templates.
- */
 
 @Service
 public class PlayerServiceImpl implements PlayerService {

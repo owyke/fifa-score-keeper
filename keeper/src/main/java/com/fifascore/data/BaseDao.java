@@ -7,4 +7,8 @@ public interface BaseDao<T> {
 
     public List<T> getAll();
 
+
+    void deleteById(Long idToDelete);
+
+    public T merge(T entity);
 }

@@ -7,14 +7,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
-/**
- * Created with IntelliJ IDEA.
- * User: wykeosk
- * Date: 2013-06-07
- * Time: 11:48
- * To change this template use File | Settings | File Templates.
- */
-
 @Entity
 public class Player {
 

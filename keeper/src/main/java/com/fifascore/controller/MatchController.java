@@ -6,11 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -24,8 +22,7 @@ public class MatchController {
     GameSessionController gameSessionController;
 
 
-
-    @RequestMapping(value = "/match")
+    @RequestMapping(value = "match")
     public
     @ResponseBody
     List<Match> getAllMatchesForCurrentSession() {
@@ -35,7 +32,16 @@ public class MatchController {
 
     @RequestMapping(value = "match", method = RequestMethod.POST)
     public ResponseEntity<Match> addMatch(@RequestBody Match match) {
+        match.setRegistrationTime(new Date());
         Match persistedMatch = matchService.addMatch(match);
         return new ResponseEntity<Match>(persistedMatch, HttpStatus.CREATED);
     }
+
+    @RequestMapping(value = "match/{matchId}", method = RequestMethod.DELETE)
+    public ResponseEntity addMatch(@PathVariable Long matchId) {
+        matchService.deleteMatchById(matchId);
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+
 }

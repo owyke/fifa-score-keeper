@@ -7,7 +7,6 @@ function MatchSetup() {
 }
 
 
-
 function GameSession() {
     var self = this;
 
@@ -18,7 +17,7 @@ function GameSession() {
     self.sessionEnded = ko.observable("");
     self.matches = ko.observableArray([]);
 
-    self.sessionStartedFormatted = ko.computed(function() {
+    self.sessionStartedFormatted = ko.computed(function () {
         return getFullDateTime(self.sessionStarted());
     });
 
@@ -26,15 +25,24 @@ function GameSession() {
         return self.id() !== null;
     });
 
+    self.reset = function () {
+        self.id(null);
+        self.name("");
+        self.location("");
+        self.sessionStarted("");
+        self.sessionEnded("");
+        self.matches([]);
+    }
+
     function getFullDateTime(milliTime) {
         console.log(milliTime);
         var time = new Date(milliTime);
-        return time.getFullYear()+"-"+padOneZero(time.getMonth())+"-"+padOneZero(time.getDate())+ " " + padOneZero(time.getHours())+":"+padOneZero(time.getMinutes());
+        return time.getFullYear() + "-" + padOneZero(time.getMonth()) + "-" + padOneZero(time.getDate()) + " " + padOneZero(time.getHours()) + ":" + padOneZero(time.getMinutes());
     }
 
     function padOneZero(month) {
         var paddedMonth;
-        if(month < 10) {
+        if (month < 10) {
             paddedMonth = "0".concat(month);
         } else {
             paddedMonth = month;
@@ -57,7 +65,6 @@ function Match() {
         return self.homeGoals() + " - " + self.awayGoals();
     });
 }
-
 
 
 function Team() {

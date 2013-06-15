@@ -2,7 +2,6 @@ package com.fifascore.controller;
 
 import com.fifascore.model.GameSession;
 import com.fifascore.service.GameSessionService;
-import org.eclipse.persistence.sessions.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +13,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class GameSessionController {
+
+
     @Autowired
     GameSessionService gameSessionService;
 
@@ -29,6 +30,12 @@ public class GameSessionController {
     @RequestMapping(value = "session", method = RequestMethod.POST)
     public ResponseEntity<GameSession> createSession(@RequestBody GameSession session) {
         gameSessionService.addUserSubmittedGameSession(session);
+        return new ResponseEntity<GameSession>(session, HttpStatus.CREATED);
+    }
+
+    @RequestMapping(value = "session", method = RequestMethod.PUT)
+    public ResponseEntity<GameSession> updateSession(@RequestBody GameSession session) {
+        gameSessionService.updateSession(session);
         return new ResponseEntity<GameSession>(session, HttpStatus.CREATED);
     }
 }

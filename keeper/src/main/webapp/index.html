@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <title> Fifa Score Keeper </title>
     <script type="text/javascript" src="js/knockout-2.1.0.js"></script>
@@ -28,12 +28,14 @@
                 <div><strong>Session name:</strong> <span data-bind="text: session.name"></span></div>
                 <div><strong>Session location:</strong> <span data-bind="text: session.location"></span></div>
                 <div><strong>Session started:</strong> <span data-bind="text: session.sessionStartedFormatted"></span></div>
+                <div class="row-fluid">
+                    <button data-bind="click: endSession" class="btn">End session</button>
+                </div>
             </div>
         </section>
 
 
         <div class="row-fluid small-padding"></div>
-
 
 
         <section data-bind="visible: $root.session.active">
@@ -51,37 +53,58 @@
             </div>
 
         </section>
-        <div id="resultModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
-                <h3 id="myModalLabel">Enter score</h3>
+
+        <div class="row-fluid small-padding"></div>
+
+        <section data-bind="visible: session.matches().length > 0">
+            <div data-bind="foreach: session.matches">
+                <div class="row-fluid">
+                    <div>
+                        <span data-bind="text: homePlayer().userName, css: {winner:homeGoals() > awayGoals()}"></span>(<span data-bind="text: homeTeam().name"></span>) - <span
+                        data-bind="text: awayPlayer().userName, css: {winner:homeGoals() < awayGoals()}"></span>(<span data-bind="text: awayTeam().name"></span>)</br>
+                        <span data-bind="text: homeGoals"></span> - <span data-bind="text: awayGoals"></span>
+                    </div>
+                    <div data-bind="click: $root.deleteMatch">
+                        <a href="#"><img src="img/delete.png"></a>
+                    </div>
+                </div>
             </div>
-            <div class="modal-body">
-                <input id="homeGoals" type="text" data-bind="value: homeGoals" class="input-small homeBackground" placeholder="Home goals"/>
-                <input id="awayGoals" type="text" data-bind="value: awayGoals" class="input-small awayBackground" placeholder="Away goals"/>
-            </div>
-            <div class="modal-footer">
-                <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-                <button class="btn btn-primary" data-bind="click: $root.registerScore">Register</button>
-            </div>
+
+    </div>
+    </section>
+
+
+    <div id="resultModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
+            <h3 id="myModalLabel">Enter score</h3>
         </div>
-
-
-        <div id="sessionModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
-                <h3 id="sessionModalLabel">Create new game session</h3>
-            </div>
-            <div class="modal-body">
-                <input id="sessionName" type="text" data-bind="value: sessionName" class="input-small homeBackground" placeholder="Session name"/>
-                <input id="sessionLocation" type="text" data-bind="value: sessionLocation" class="input-small awayBackground" placeholder="Session location"/>
-            </div>
-            <div class="modal-footer">
-                <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-                <button class="btn btn-primary" data-bind="click: $root.registerGameSession">Register</button>
-            </div>
+        <div class="modal-body">
+            <input id="homeGoals" type="text" data-bind="value: homeGoals" class="input-small homeBackground" placeholder="Home goals"/>
+            <input id="awayGoals" type="text" data-bind="value: awayGoals" class="input-small awayBackground" placeholder="Away goals"/>
+        </div>
+        <div class="modal-footer">
+            <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+            <button class="btn btn-primary" data-bind="click: $root.registerScore">Register</button>
         </div>
     </div>
+
+
+    <div id="sessionModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
+            <h3 id="sessionModalLabel">Create new game session</h3>
+        </div>
+        <div class="modal-body">
+            <input id="sessionName" type="text" data-bind="value: sessionName" class="input-small homeBackground" placeholder="Session name"/>
+            <input id="sessionLocation" type="text" data-bind="value: sessionLocation" class="input-small awayBackground" placeholder="Session location"/>
+        </div>
+        <div class="modal-footer">
+            <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+            <button class="btn btn-primary" data-bind="click: $root.registerGameSession">Register</button>
+        </div>
+    </div>
+</div>
 </div>
 
 
@@ -112,7 +135,9 @@
         self.homePlayerName = ko.observable();
 
 
-        self.setupComplete = function() {return (self.awayTeamName() && self.homeTeamName() && self.awayPlayerName() && self.homePlayerName())};
+        self.setupComplete = function () {
+            return (self.availableTeams[self.awayTeamName()] && self.availableTeams[self.homeTeamName()] && self.availablePlayers[self.awayPlayerName()] && self.availablePlayers[self.homePlayerName()])
+        };
 
         self.showScoreModal = function () {
             $('#awayGoals').attr('placeholder', self.awayPlayerName() + " score");
@@ -126,6 +151,7 @@
 
             var match = new Match();
             match.awayGoals(self.awayGoals());
+            match.awayGoals(self.awayGoals());
             match.homeGoals(self.homeGoals());
             match.homePlayer(self.availablePlayers[self.homePlayerName()]);
             match.awayPlayer(self.availablePlayers[self.awayPlayerName()]);
@@ -136,24 +162,23 @@
                 contentType: 'application/json',
                 method: "POST",
                 data: ko.toJSON(match),
-                success: function(data) {
+                success: function (data) {
                     match.id = data.id;
+                    self.session.matches.push(match);
+                    self.awayGoals('');
+                    self.homeGoals('');
+                    $('#resultModal').modal('hide');
                 }
             });
-
-            self.session.matches.push(match);
-            self.awayGoals('');
-            self.homeGoals('');
-            $('#resultModal').modal('hide');
         }
 
-        self.showGameSessionModal = function() {
+        self.showGameSessionModal = function () {
             $('#sessionModal').modal({
                 keyboard: true
             })
         }
 
-        self.registerGameSession = function() {
+        self.registerGameSession = function () {
             var gameSession = new GameSession();
             gameSession.location = self.sessionLocation;
             gameSession.name = self.sessionName;
@@ -162,7 +187,7 @@
                 contentType: 'application/json',
                 method: "POST",
                 data: ko.toJSON(gameSession),
-                success: function(data) {
+                success: function (data) {
                     console.log("Created session: ");
                     console.log(data);
                     self.session.id(data.id);
@@ -170,8 +195,36 @@
                     self.session.location(data.location);
                     self.session.sessionStarted(data.sessionStarted);
                 }
-           });
+            });
             $('#sessionModal').modal('hide');
+        }
+
+        self.endSession = function () {
+            self.session.sessionEnded((new Date).getTime());
+            $.ajax({
+                url: "ajax/session",
+                contentType: 'application/json',
+                method: "PUT",
+                data: ko.toJSON(self.session),
+                success: function (data) {
+                    console.log("Created closed: ");
+                    console.log(data);
+                    self.session.reset();
+                }
+            });
+        }
+
+        self.deleteMatch = function(match) {
+            console.log(match);
+            $.ajax({
+                url: "ajax/match/" + match.id,
+                contentType: 'application/json',
+                method: "DELETE",
+                success: function (data) {
+                    self.session.matches.remove(match);
+                }
+            });
+
         }
 
         self.availablePlayerNames = [];
@@ -211,9 +264,9 @@
         });
 
         //Get existing session if exist
-        $.getJSON("ajax/session",function(existingSession) {
+        $.getJSON("ajax/session", function (existingSession) {
             console.log(existingSession);
-            if(existingSession.id) {
+            if (existingSession.id) {
                 var s = model.session;
                 s.id(existingSession.id);
                 s.location(existingSession.location);
@@ -221,7 +274,7 @@
                 s.sessionStarted(existingSession.sessionStarted);
 
                 // Data mapping for matches
-                $.each(existingSession.matches, function(index, existingMatch) {
+                $.each(existingSession.matches, function (index, existingMatch) {
                     console.log(match);
                     var match = new Match();
                     match.id = existingMatch.id;
@@ -232,11 +285,9 @@
                     match.homeTeam(model.availableTeams[existingMatch.homeTeam.name]);
                     match.awayTeam(model.availableTeams[existingMatch.awayTeam.name]);
                     s.matches.push(match);
-
                 })
             }
         });
-
     });
 </script>
 </body>
