@@ -10,6 +10,8 @@ public interface GameSessionService {
 
     public GameSession updateSession(final GameSession session);
 
-    public GameSession createNewGameSession(final Boolean closePreviousSessions);
+    public GameSession saveSession(final GameSession session);
+
+        public GameSession createNewGameSession(final Boolean closePreviousSessions);
 
 }

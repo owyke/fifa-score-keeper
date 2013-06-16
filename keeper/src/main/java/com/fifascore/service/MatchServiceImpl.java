@@ -17,16 +17,12 @@ public class MatchServiceImpl implements MatchService {
     @Autowired
     private MatchDao matchDao;
 
-    @Autowired
-    private GameSessionDao gameSessionDao;
-
     @Transactional
     public Match addMatch(final Match match, final GameSession gameSession) {
 
 
         gameSession.getMatches().add(match);
-        gameSessionDao.persist(gameSession);
-
+        gameSessionService.saveSession(gameSession);
         return match;
     }
 

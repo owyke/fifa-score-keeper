@@ -119,21 +119,25 @@
         var self = this;
         self.session = new GameSession();
 
-        self.setup = ko.observable(new MatchSetup());
-        self.matches = ko.observableArray([]);
-
+        // Fields mapped to match result modal
         self.awayGoals = ko.observable();
         self.homeGoals = ko.observable();
 
-
+        // Fields mapped to session setup
         self.sessionName = ko.observable();
         self.sessionLocation = ko.observable();
 
+        // Fields mapped to match setup
         self.awayTeamName = ko.observable();
         self.homeTeamName = ko.observable();
         self.awayPlayerName = ko.observable();
         self.homePlayerName = ko.observable();
 
+        // Fields initialized at startup containing available players and teams
+        self.availablePlayerNames = [];
+        self.availablePlayers = {};
+        self.availableTeamNames = [];
+        self.availableTeams = {};
 
         self.setupComplete = function () {
             return (self.availableTeams[self.awayTeamName()] && self.availableTeams[self.homeTeamName()] && self.availablePlayers[self.awayPlayerName()] && self.availablePlayers[self.homePlayerName()])
@@ -226,19 +230,17 @@
             });
 
         }
-
-        self.availablePlayerNames = [];
-        self.availablePlayers = {};
-        self.availableTeamNames = [];
-        self.availableTeams = {};
     }
 
 
     var model;
+
     $(document).ready(function () {
         model = new MatchViewModel();
         ko.applyBindings(model);
 
+
+        // Initialize list of available players
         $.ajax({
                     url: "ajax/player",
                     async: false,
@@ -251,6 +253,8 @@
 
                 }
         );
+
+        // Initializae lists of available teams
         $.ajax({
             url: "ajax/team",
             async: false,

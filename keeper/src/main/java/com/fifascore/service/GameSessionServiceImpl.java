@@ -38,6 +38,12 @@ public class GameSessionServiceImpl implements GameSessionService {
     }
 
     @Transactional
+    public GameSession saveSession(final GameSession session) {
+        gameSessionDao.persist(session);
+        return session;
+    }
+
+    @Transactional
     public GameSession createNewGameSession(final Boolean closePreviousSessions) {
         GameSession newSession = new GameSession();
         newSession.setSessionStarted(new Date());
